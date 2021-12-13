@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1083690886495",
+    "project_id": "finance-tracker-dad54",
+    "storage_bucket": "finance-tracker-dad54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083690886495:android:52025e5808ff12b1efc2ea",
+        "android_client_info": {
+          "package_name": "com.devall_software.finance_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083690886495-krsvdn73mom42m8hi9ln8h50df256g7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWHCOAU_aI5XXtUOp0-xgdr3r9EDTek3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083690886495-krsvdn73mom42m8hi9ln8h50df256g7g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
