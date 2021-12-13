@@ -29,13 +29,21 @@ class CustomDarkTheme {
         color: Colors.white,
         fontSize: 20.0,
         fontWeight: FontWeight.bold
-      )
+      ),
+      headline1: TextStyle(
+        color: Colors.white,
+        fontSize: 30.0,
+        fontWeight: FontWeight.bold
+      ),
     ),
     appBarTheme: const AppBarTheme(
       foregroundColor: textAccent
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: accent,
+    ),
+    iconTheme: const IconThemeData(
+      color: textAccent
     )
   );
 

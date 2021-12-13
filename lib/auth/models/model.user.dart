@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 class UserModel {
 
-  late Map<String, dynamic> balance;
   final String id;
   final String? name;
   final String? lastName;
@@ -8,23 +9,38 @@ class UserModel {
   UserModel(this.id, {
     this.name,
     this.lastName
-  }) {
-    balance = {
-      'date': DateTime.now(),
-      'type': 'incoming',
-      'value': 12.50,
-      'area': {
-        '__id': DateTime.now().millisecond,
-        'name': 'videogames'
+  });
+
+  UserModel copyWith(Map<String, dynamic> json) {
+    final thisUser = toJSON();
+    thisUser.updateAll((key, value) {
+      if(json.keys.contains(key)) {
+        return json[key];
       }
-    };
+
+      return value;
+    });
+
+    return UserModel.fromJSON(thisUser);
   }
+
+  UserModel.fromJSON(Map<String, dynamic> json):
+    id = json['__id'],
+    name = json['name'] ?? 'No name',
+    lastName = json['last_name'] ?? 'No last name'
+    ;
 
   Map<String, dynamic> toJSON() => {
     '__id': id,
     'name': name,
     'last_name': lastName,
-    'balance': balance
   };
+
+  String toJSONString() {
+    // Parsing into a string
+    final jsonString = json.encode(toJSON());
+
+    return jsonString;
+  }
 
 }

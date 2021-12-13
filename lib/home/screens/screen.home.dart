@@ -2,7 +2,6 @@ import 'package:finance_tracker/assembler/assembler.dart';
 import 'package:finance_tracker/auth/models/model.user.dart';
 import 'package:finance_tracker/router/routes.dart';
 import 'package:finance_tracker/ui/components/component.drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -13,14 +12,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // final user = FirebaseAuth.instance.currentUser;
-
-    // Wrapper().currentUserSink = Wrapper().currentUserSink = UserModel(
-    //   user!.uid,
-    //   // name: userData.data()['name'] ?? 'Not defined',
-    //   // lastName: userData.data()['last_name'] ?? 'Not defined'
-    // );
     
     return Scaffold(
       appBar: AppBar(
@@ -244,7 +235,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _banner(BuildContext context, Size size, Map<String, dynamic> data) {
-    return StreamBuilder<UserModel>(
+    return StreamBuilder<UserModel?>(
       stream: Wrapper().currentUserStream,
       builder: (context, snapshot) {
 

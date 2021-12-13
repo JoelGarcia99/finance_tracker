@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^1.10.5
   cloud_firestore: ^3.1.4
   flutter_smart_dialog: ^3.0.6
+  shared_preferences: ^2.0.11
 
 dev_dependencies:
   flutter_test:

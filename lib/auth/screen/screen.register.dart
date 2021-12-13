@@ -1,4 +1,6 @@
+import 'package:finance_tracker/assembler/assembler.dart';
 import 'package:finance_tracker/auth/api/api.auth.dart';
+import 'package:finance_tracker/cache/cache.preferences.dart';
 import 'package:finance_tracker/router/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ class RegisterScreen extends StatelessWidget {
   RegisterScreen({ Key? key }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   
     return Scaffold(
       body: ListView(
         children: [
@@ -22,7 +24,14 @@ class RegisterScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: [
+                    Center(
+                      child: Text(
+                        "Welcome",
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
                     _getInputField(
+                      context, 
                       placeholder: "Email",
                       keyboard: TextInputType.emailAddress,
                       leadingIcon: Icons.email_outlined,
@@ -30,6 +39,7 @@ class RegisterScreen extends StatelessWidget {
                       onSave: (text) => userPassword[0] = text ?? ''
                     ),
                     _getInputField(
+                      context,
                       placeholder: "Password",
                       // helperText: "",
                       leadingIcon: Icons.security_outlined,
@@ -37,38 +47,12 @@ class RegisterScreen extends StatelessWidget {
                       isPassword: true,
                       onSave: (text) => userPassword[1] = text ?? ''
                     ),
-                    MaterialButton(
-                      onPressed: ()async{
-                        formKey.currentState?.save();
-                        try {
-                          SmartDialog.showLoading();
-                          // await AuthAPI().signUp(userPassword[0], userPassword[1]);
-                          await AuthAPI().signIn(userPassword[0], userPassword[1]);
-                          Navigator.of(context).pushReplacementNamed(RouteNames.home.toString());
-                        }on FirebaseAuthException catch (_, e) {
-                          SmartDialog.show(
-                            widget: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0,),
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              child: Text(e.toString())
-                            )
-                          );
-                        }
-                        catch(e) {
-                          SmartDialog.show(
-                            widget: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0,),
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              child: Text("Error trying to log in\n${e}")
-                            )
-                          );
-                        }
-                        finally {
-                          SmartDialog.dismiss();
-                        }
-                      },
-                      child: const Text("Sign up"),
-                      color: Theme.of(context).colorScheme.secondary
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _getSignUpBtn(context),
+                        _getSignUpBtn(context, isLogin: true),
+                      ],
                     ),
                   ],
                 ),
@@ -80,9 +64,49 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _getInputField({
+  Widget _getSignUpBtn(BuildContext context, {bool isLogin = false}) {
+    return MaterialButton(
+      onPressed: ()async{
+        formKey.currentState?.save();
+        try {
+          SmartDialog.showLoading();
+          if(isLogin) {
+            await AuthAPI().signIn(userPassword[0], userPassword[1]);
+          } else {
+            await AuthAPI().signUp(userPassword[0], userPassword[1]);
+          }
+          
+          Navigator.of(context).pushReplacementNamed(RouteNames.home.toString());
+        }on FirebaseAuthException catch (_, e) {
+          SmartDialog.show(
+            widget: Container(
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0,),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Text(e.toString())
+            )
+          );
+        }
+        catch(e) {
+          SmartDialog.show(
+            widget: Container(
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0,),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Text("Error trying to log in\n$e")
+            )
+          );
+        }
+        finally {
+          SmartDialog.dismiss();
+        }
+      },
+      child: Text(isLogin? "Login" : "Sign up"),
+      color: Theme.of(context).colorScheme.secondary
+    );
+  }
+
+
+  Widget _getInputField(BuildContext context, {
     required String placeholder,
-    // required String helperText,
     required IconData leadingIcon,
     required String name,
     required void Function(String?) onSave,
@@ -92,12 +116,14 @@ class RegisterScreen extends StatelessWidget {
     return TextFormField(
       enabled: true,
       keyboardType: keyboard,
+      cursorColor: Colors.white,
       decoration: InputDecoration(
-        
         hintText: placeholder,
-        // helperText: helperText,
-        icon: Icon(leadingIcon),
+        icon: Icon(leadingIcon, color: Theme.of(context).iconTheme.color),
         labelText: name,
+        labelStyle: TextStyle(
+          color: Theme.of(context).textTheme.headline5?.color
+        )
       ),
       obscureText: isPassword,
       onSaved: onSave,
